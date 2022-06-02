@@ -1,8 +1,10 @@
 const Home = () => {
     return(
-        <div>
-            A
-        </div>
+        <AppLayout>
+            <div>
+                A
+            </div>
+        </AppLayout>
     );
 }
 
