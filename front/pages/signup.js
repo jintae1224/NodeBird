@@ -1,8 +1,12 @@
+import AppLayout from "../components/AppLayout";
+
 const Signup = () => {
     return(
-        <div>
-            a
-        </div>
+        <AppLayout>
+            <div>
+                A
+            </div>
+        </AppLayout>
     );
 }
 
