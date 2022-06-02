@@ -1,9 +1,3 @@
-import propTypes from 'prop-types'
-
-AppLayout.propTypes = {
-    children: propTypes.node.isRequired,
-}
-
 const AppLayout = ({children}) => {
     return(
         <div>
