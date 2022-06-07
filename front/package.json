@@ -9,9 +9,12 @@
   "author": "JinTae",
   "license": "ISC",
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.21.0",
     "next": "^12.1.6",
     "react": "^18.1.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "eslint": "^8.16.0",
