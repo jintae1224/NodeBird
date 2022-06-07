@@ -20,7 +20,8 @@ const AppLayout = ({children}) => {
                         <Link href="/signup"><a>회원가입</a></Link>
                     </Menu.Item>
                 </Menu>
-                <Row>
+                <Row gutter={8}>
+                    {/* gutter : 간격(컬럼간의) */}
                     <Col xs={24} md={6} >
                     {/* xs : 모바일, sm : 태블릿, md : 작은 데스크 탑 */}
                         왼쪽메뉴
