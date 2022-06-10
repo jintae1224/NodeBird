@@ -1,8 +1,14 @@
 import Link from "next/link";
 import {Col, Input, Menu, Row} from "antd"
+import { useState } from "react";
 
+import UserProfile from "../components/UserProfile";
+import LoginForm from "../components/LoginForm";
 
 const AppLayout = ({children}) => {
+
+    const [iseLoggedIn, setIsLoggedIn] = useState(false)
+
     return(
         <div>
             <div>
@@ -24,13 +30,14 @@ const AppLayout = ({children}) => {
                     {/* gutter : 간격(컬럼간의) */}
                     <Col xs={24} md={6} >
                     {/* xs : 모바일, sm : 태블릿, md : 작은 데스크 탑 */}
-                        왼쪽메뉴
+                        {iseLoggedIn ? <UserProfile /> : <LoginForm />}
                     </Col>
                     <Col xs={24} md={12} >
                         {children}
                     </Col>
                     <Col xs={24} md={6} >
-                        오른쪽 메뉴
+                        <a href="https://www.zerocho.com" target="_blank" rel="norereferrer noopener">Made by Zerocho</a>
+                        {/* target="_blank" 새창에서 열기 -> 보안문제로 rel="norereferrer noopener" 추가 */}
                     </Col>
                     {/* 모바일 : 100%짜리 3개 stack
                     데스크 탑 : 25% 하나, 50%하나, 25%gksk */}
