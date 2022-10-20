@@ -49,7 +49,7 @@ const dummyPost = {
     id: 1,
     nickname: "제로초",
   },
-  Images: [],
+  images: [],
   Comments: [],
 };
 
