@@ -10,6 +10,7 @@ import ButtonGroup from "antd/lib/button/button-group";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
+import PostCardContent from "./PostCardContent";
 import PostImages from "./PostImages";
 
 const PostCard = ({ post }) => {
@@ -37,7 +38,7 @@ const PostCard = ({ post }) => {
               onClick={onToggleLike}
             />
           ) : (
-            <HeartOutlined key="heart" onClick={onToggleLike}/>
+            <HeartOutlined key="heart" onClick={onToggleLike} />
           ),
           <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover
@@ -63,24 +64,27 @@ const PostCard = ({ post }) => {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.content}
+          description={<PostCardContent postData={post.content} />}
         />
-        {commentFormOpened && <div>
-            <CommentForm post={post}/>
+        {commentFormOpened && (
+          <div>
+            <CommentForm post={post} />
             <List
               header={`${post.Comment.length}개의 댓글`}
               itemLayout="horizontal"
               dataSource={post.Comment}
               renderItem={(item) => (
                 <li>
-                  <Comment author={item.User.nickname}
+                  <Comment
+                    author={item.User.nickname}
                     avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
                     content={item.content}
                   />
                 </li>
               )}
-              />
-          </div>}
+            />
+          </div>
+        )}
         <Button></Button>
       </Card>
       {/* <CommentForm />
