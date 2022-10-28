@@ -1,12 +1,11 @@
 import { createWrapper } from "next-redux-wrapper";
 import { applyMiddleware, compose, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { ThunkMiddleware } from "redux-thunk";
 
 import reducer from "../reducers";
 
 const configureStore = () => {
-  const middlewares = [ThunkMiddleware];
+  const middlewares = [];
   const enhancer =
     process.env.NODE_ENV === "production"
       ? compose(applyMiddleware(...middlewares))
