@@ -8,6 +8,7 @@ import {
   takeEvery,
   takeLatest,
   throttle,
+  delay,
 } from "redux-saga/effects";
 
 function loginApi(data) {
@@ -16,15 +17,16 @@ function loginApi(data) {
 
 function* logIn(action) {
   try {
-    const result = yield call(loginApi, action.data);
+    // const result = yield call(loginApi, action.data);
+    yield delay(1000);
     yield put({
       type: "LOG_IN_SUCCESS",
-      data: result.data,
+      // data: result.data,
     });
   } catch (err) {
     yield put({
       type: "LOG_IN_FAILURE",
-      data: err.response.data,
+      // data: err.response.data,
     });
   }
 }
@@ -35,15 +37,16 @@ function logOutApi() {
 
 function* logOut() {
   try {
-    const result = yield call(logOutApi);
+    // const result = yield call(logOutApi);
+    yield delay(1000);
     yield put({
       type: "LOG_OUT_SUCCESS",
-      data: result.data,
+      // data: result.data,
     });
   } catch (err) {
     yield put({
       type: "LOG_OUT_FAILURE",
-      data: err.response.data,
+      // data: err.response.data,
     });
   }
 }
@@ -54,15 +57,16 @@ function addPostApi(data) {
 
 function* addPost(action) {
   try {
-    const result = yield call(addPostApi, action.data);
+    // const result = yield call(addPostApi, action.data);
+    yield delay(1000);
     yield put({
       type: "ADD_POST_SUCCESS",
-      data: result.data,
+      // data: result.data,
     });
   } catch (err) {
     yield put({
       type: "ADD_POST_FAILURE",
-      data: err.response.data,
+      // data: err.response.data,
     });
   }
 }
