@@ -1,5 +1,14 @@
 import axios from "axios";
-import { all, call, fork, put, take } from "redux-saga/effects";
+import {
+  all,
+  call,
+  fork,
+  put,
+  take,
+  takeEvery,
+  takeLatest,
+  throttle,
+} from "redux-saga/effects";
 
 function loginApi(data) {
   return axios.post("/api/login", data);
@@ -59,13 +68,13 @@ function* addPost(action) {
 }
 
 function* watchLogin() {
-  yield take("LOG_IN_REQUEST", logIn);
+  yield takeLatest("LOG_IN_REQUEST", logIn);
 }
 function* watchLogOut() {
-  yield take("LOG_OUT_REQUEST", logOut);
+  yield takeLatest("LOG_OUT_REQUEST", logOut);
 }
 function* watchAddPost() {
-  yield take("ADD_POST_REQUEST", addPost);
+  yield throttle("ADD_POST_REQUEST", addPost, 2000);
 }
 
 export default function* rootSaga() {
