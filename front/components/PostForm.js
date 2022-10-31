@@ -8,7 +8,7 @@ import { addPost } from "../reducers/post";
 const PostForm = () => {
   const { imagePaths, addPostDone } = useSelector((state) => state.post);
   const dispatch = useDispatch();
-  const [text, onChangeText,  setText] = useInput("");
+  const [text, onChangeText, setText] = useInput("");
   const imageInput = useRef();
 
   useEffect(() => {
@@ -18,6 +18,7 @@ const PostForm = () => {
   }, [addPostDone]);
 
   const onSubmit = useCallback(() => {
+    console.log(text);
     dispatch(addPost(text));
   }, [text]);
 
