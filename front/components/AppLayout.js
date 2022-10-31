@@ -7,7 +7,7 @@ import LoginForm from "../components/LoginForm";
 import { useSelector } from "react-redux";
 
 const AppLayout = ({ children }) => {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const {me} = useSelector((state) => state.user);
 
   return (
     <div>
@@ -36,7 +36,7 @@ const AppLayout = ({ children }) => {
           {/* gutter : 간격(컬럼간의) */}
           <Col xs={24} md={6}>
             {/* xs : 모바일, sm : 태블릿, md : 작은 데스크 탑 */}
-            {isLoggedIn ? <UserProfile /> : <LoginForm />}
+            {me ? <UserProfile /> : <LoginForm />}
           </Col>
           <Col xs={24} md={12}>
             {children}
