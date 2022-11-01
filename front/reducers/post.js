@@ -11,24 +11,31 @@ export const initialState = {
       content: "첫 번째 게시글 #해시태그 #익스프레스",
       images: [
         {
+          id: shortid.generate(),
           src: "https://sunstat.com/wp-content/uploads/2019/01/%EC%8A%AC%EB%9D%BC%EC%9D%B4%EB%93%9C-%EB%B0%B0%EA%B2%BD%EC%9D%B4%EB%AF%B8%EC%A7%80.png",
         },
         {
+          id: shortid.generate(),
           src: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
         },
         {
+          id: shortid.generate(),
           src: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile6.uf.tistory.com%2Fimage%2F257E0B3655214FFD03A829",
         },
       ],
       Comment: [
         {
+          id: shortid.generate(),
           User: {
+            id: shortid.generate(),
             nickname: "nero",
           },
           content: "와우",
         },
         {
+          id: shortid.generate(),
           User: {
+            id: shortid.generate(),
             nickname: "hero",
           },
           content: "굿",
@@ -64,8 +71,8 @@ export const addComment = (data) => ({
 });
 
 const dummyPost = (data) => ({
-  id: shortid.generate(),
-  content: data,
+  id: data.id,
+  content: data.content,
   User: {
     id: 1,
     nickname: "제로초",
