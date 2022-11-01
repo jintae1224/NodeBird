@@ -1,5 +1,5 @@
 import shortid from "shortid";
-
+import producer from "immer";
 export const initialState = {
   mainPosts: [
     {
