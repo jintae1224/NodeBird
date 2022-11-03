@@ -71,7 +71,7 @@ initialState.mainPosts = initialState.mainPosts.concat(
       content: faker.lorem.paragraph(),
       images: [
         {
-          src: faker.image.imageUrl(),
+          src: faker.image.image(),
         },
       ],
       Comment: [
