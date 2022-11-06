@@ -73,7 +73,7 @@ export const generateDummyPost = (number) =>
         nickname: faker.name.findName(),
       },
       content: faker.lorem.paragraph(),
-      Images: [
+      images: [
         {
           src: faker.image.image(),
         },
@@ -147,7 +147,7 @@ const reducer = (state = initialState, action) => {
         draft.loadPostLoading = false;
         draft.loadPostDone = true;
         draft.loadPostError = null;
-        draft.mainPosts = action.data.concat(action.mainPosts);
+        draft.mainPosts = action.data.concat(draft.mainPosts);
         draft.hasMorePost = draft.mainPosts.length < 50;
         break;
       case LOAD_POSTS_FAILURE:

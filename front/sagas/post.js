@@ -59,7 +59,7 @@ function addPostApi(data) {
   return axios.post("/api/post", data);
 }
 
-function* loadPost(action) {
+function* loadPosts(action) {
   try {
     // const result = yield call(addPostApi, action.data);
     const id = shortid.generate();
