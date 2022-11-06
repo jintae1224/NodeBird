@@ -11,6 +11,7 @@ import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { REMOVE_POST_REQUEST } from "../reducers/post";
 import CommentForm from "./CommentForm";
+import FollowButton from "./FollowButton";
 import PostCardContent from "./PostCardContent";
 import PostImages from "./PostImages";
 
@@ -74,6 +75,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         {/* <Images /> */}
         <Card.Meta
