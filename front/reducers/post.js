@@ -3,48 +3,52 @@ import produce from "immer";
 import faker from "faker";
 export const initialState = {
   mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: "제로초",
-      },
-      content: "첫 번째 게시글 #해시태그 #익스프레스",
-      images: [
-        {
-          id: shortid.generate(),
-          src: "https://sunstat.com/wp-content/uploads/2019/01/%EC%8A%AC%EB%9D%BC%EC%9D%B4%EB%93%9C-%EB%B0%B0%EA%B2%BD%EC%9D%B4%EB%AF%B8%EC%A7%80.png",
-        },
-        {
-          id: shortid.generate(),
-          src: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
-        },
-        {
-          id: shortid.generate(),
-          src: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile6.uf.tistory.com%2Fimage%2F257E0B3655214FFD03A829",
-        },
-      ],
-      Comment: [
-        {
-          id: shortid.generate(),
-          User: {
-            id: shortid.generate(),
-            nickname: "nero",
-          },
-          content: "와우",
-        },
-        {
-          id: shortid.generate(),
-          User: {
-            id: shortid.generate(),
-            nickname: "hero",
-          },
-          content: "굿",
-        },
-      ],
-    },
+    // {
+    //   id: 1,
+    //   User: {
+    //     id: 1,
+    //     nickname: "제로초",
+    //   },
+    //   content: "첫 번째 게시글 #해시태그 #익스프레스",
+    //   images: [
+    //     {
+    //       id: shortid.generate(),
+    //       src: "https://sunstat.com/wp-content/uploads/2019/01/%EC%8A%AC%EB%9D%BC%EC%9D%B4%EB%93%9C-%EB%B0%B0%EA%B2%BD%EC%9D%B4%EB%AF%B8%EC%A7%80.png",
+    //     },
+    //     {
+    //       id: shortid.generate(),
+    //       src: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
+    //     },
+    //     {
+    //       id: shortid.generate(),
+    //       src: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile6.uf.tistory.com%2Fimage%2F257E0B3655214FFD03A829",
+    //     },
+    //   ],
+    //   Comment: [
+    //     {
+    //       id: shortid.generate(),
+    //       User: {
+    //         id: shortid.generate(),
+    //         nickname: "nero",
+    //       },
+    //       content: "와우",
+    //     },
+    //     {
+    //       id: shortid.generate(),
+    //       User: {
+    //         id: shortid.generate(),
+    //         nickname: "hero",
+    //       },
+    //       content: "굿",
+    //     },
+    //   ],
+    // },
   ],
   imagePaths: [],
+  hasMorePost: true,
+  loadPostLoading: false,
+  loadPostDone: false,
+  loadPostError: false,
   addPostLoading: false,
   addPostDone: false,
   addPostError: false,
@@ -59,8 +63,8 @@ export const initialState = {
   removeCommentError: false,
 };
 
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20)
+export const generateDummyPost = (number) =>
+  Array(number)
     .fill()
     .map((v, i) => ({
       id: shortid.generate(),
@@ -83,8 +87,11 @@ initialState.mainPosts = initialState.mainPosts.concat(
           content: faker.lorem.sentence(),
         },
       ],
-    }))
-);
+    }));
+
+export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
+export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
+export const LOAD_POSTS_FAILURE = "LOAD_POSTS_FAILURE";
 
 export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
 export const ADD_POST_SUCCESS = "ADD_POST_SUCCESS";
@@ -131,6 +138,22 @@ const dummyComment = (data) => ({
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostLoading = true;
+        draft.loadPostDone = false;
+        draft.loadPostError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostLoading = false;
+        draft.loadPostDone = true;
+        draft.loadPostError = null;
+        draft.mainPosts = action.data.concat(action.mainPosts);
+        draft.hasMorePost = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostLoading = false;
+        draft.loadPostError = action.error;
+        break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
         draft.addPostDone = false;
