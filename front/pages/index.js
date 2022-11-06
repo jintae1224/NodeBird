@@ -30,13 +30,13 @@ const Home = () => {
   const { me } = useSelector((state) => state.user);
   const { mainPosts } = useSelector((state) => state.post);
 
-  console.log(mainPosts);
+  console.log("dddddd", mainPosts);
 
   return (
     <AppLayout>
       {me && <PostForm />}
       {mainPosts.map((post, index) => (
-        <PostCard post={post} />
+        <PostCard key={post.id} post={post} />
       ))}
     </AppLayout>
   );

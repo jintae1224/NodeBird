@@ -66,14 +66,14 @@ export const initialState = {
 export const generateDummyPost = (number) =>
   Array(number)
     .fill()
-    .map((v, i) => ({
+    .map(() => ({
       id: shortid.generate(),
       User: {
         id: shortid.generate(),
         nickname: faker.name.findName(),
       },
       content: faker.lorem.paragraph(),
-      images: [
+      Images: [
         {
           src: faker.image.image(),
         },
