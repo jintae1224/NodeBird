@@ -6,7 +6,7 @@ app.get("/", (req, res) => {
   res.send("hello express");
 });
 
-router.get("/posts", (req, res) => {
+app.get("/posts", (req, res) => {
   res.json([
     { id: 1, content: "hello" },
     { id: 2, content: "hello" },
