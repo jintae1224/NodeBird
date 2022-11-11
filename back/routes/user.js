@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
       nickname: req.body.nickname,
       password: hashedPassword,
     });
-    res.status(200).send("ok");
+    res.status(201).send("ok");
   } catch (error) {
     console.log(error);
     // next로 error를 보내면 error를 한번에 처리, express가 알아서 error를 알려줌
