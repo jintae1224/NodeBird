@@ -1,4 +1,4 @@
-module.export = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
     {
@@ -27,7 +27,7 @@ module.export = (sequelize, DataTypes) => {
   User.associate = (db) => {
     db.User.hasMany(db.Post); // User가 Post를 여러개 가질수 있다
     db.User.hasMany(db.Comment);
-    db.User.belongsToMany(db.Post, { through: "Like", as: "Likerd" });
+    db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
     db.User.belongsToMany(db.User, {
       through: "Follow",
       as: "Followers",
@@ -38,7 +38,6 @@ module.export = (sequelize, DataTypes) => {
       as: "Followwings",
       foreignKey: "FollowerId",
     });
-    db.Post.belongsTo(db.Post, { as: "Retweet" });
   };
   return User;
 };
