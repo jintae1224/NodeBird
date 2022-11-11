@@ -12,6 +12,8 @@ module.export = (sequelize, DataTypes) => {
       collate: "utf8mb4_general_ci", // 한글 저장
     }
   );
-  Hashtag.associate = (db) => {};
+  Hashtag.associate = (db) => {
+    db.Hashtag.belongsToMay(db.Post);
+  };
   return Hashtag;
 };
