@@ -37,7 +37,7 @@ function* logIn(action) {
     const result = yield call(loginApi, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({

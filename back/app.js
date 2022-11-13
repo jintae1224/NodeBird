@@ -1,9 +1,10 @@
 const express = require("express");
 const postRouter = require("./routes/post");
 const userRouter = require("./routes/user");
-const cors = require("cors")
+const cors = require("cors");
 const db = require("./models");
 const app = express();
+const passportConfig = require("./passport");
 
 db.sequelize
   .sync()
@@ -11,6 +12,7 @@ db.sequelize
     console.log("db연결 성공");
   })
   .catch(console.error);
+passportConfig();
 
 // cors 설정
 app.use(
@@ -23,7 +25,6 @@ app.use(
 // 위치가 중요함
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 app.get("/", (req, res) => {
   res.send("hello express");
