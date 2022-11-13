@@ -5,6 +5,12 @@ const cors = require("cors");
 const db = require("./models");
 const app = express();
 const passportConfig = require("./passport");
+const passport = require("passport");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 db.sequelize
   .sync()
@@ -25,6 +31,16 @@ app.use(
 // 위치가 중요함
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res) => {
   res.send("hello express");

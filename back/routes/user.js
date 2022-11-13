@@ -14,6 +14,7 @@ router.post("/login", (req, res, next) => {
       return res.status(401).send(info.reason);
     }
     // passport login
+    // passport에 index.js에 passport.serializeUser가 실행됨
     return req.login(user, async (loginErr) => {
       if (loginErr) {
         console.error(loginErr);
@@ -22,6 +23,12 @@ router.post("/login", (req, res, next) => {
       return res.status(200).json(user);
     });
   })(req, res, next);
+});
+
+router.post("/user/logout", (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.send("ok");
 });
 
 // POST/user
