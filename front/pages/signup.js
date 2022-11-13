@@ -3,7 +3,7 @@ import { Button, Checkbox, Form } from "antd";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 import useInput from "../hooks/useInput";
-import Router from "next/router"
+import Router, { useRouter } from "next/router";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { SIGN_UP_REQUEST } from "../reducers/user";
@@ -18,20 +18,29 @@ const Signup = () => {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     if (signUpDone) {
-      Router.push("/");
+      Router.replace("/");
     }
   }, [signUpDone]);
 
   useEffect(() => {
     if (signUpError) {
-      alert(signUpError)
+      alert(signUpError);
     }
   }, [signUpError]);
 
+  const { me } = useSelector((state) => state.user);
+  const router = useRouter();
+  useEffect(() => {
+    if (me && me.id) {
+      router.replace("/");
+    }
+  }, [me && me.id]);
   const onChangePasswordCheck = useCallback(
     (e) => {
       setPasswordCheck(e.target.value);
@@ -60,7 +69,7 @@ const Signup = () => {
   }, [email, password, passwordCheck, term]);
 
   return (
-    <AppLayout>
+    <>
       <Head>
         <title>회원가입 | NodeBird</title>
       </Head>
@@ -127,7 +136,7 @@ const Signup = () => {
           </div>
         </Form>
       </AppLayout>
-    </AppLayout>
+    </>
   );
 };
 

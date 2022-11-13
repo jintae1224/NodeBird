@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import useInput from "../hooks/useInput";
@@ -17,7 +17,14 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
-  const {logInLoading} = useSelector((state) => state.user)
+  const { logInLoading, logInError } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  }, [logInError]);
+
   const onSubmitForm = useCallback(() => {
     console.log(email, password);
     dispatch(loginRequestAction({ email, password }));
@@ -28,7 +35,13 @@ const LoginForm = () => {
       <div>
         <label htmlFor="user-email">이메일</label>
         <br />
-        <Input name="user-email" type="email" value={email} onChange={onChangeEmail} required />
+        <Input
+          name="user-email"
+          type="email"
+          value={email}
+          onChange={onChangeEmail}
+          required
+        />
         {/* label의 htmlFor와 input의 name을 연결 */}
       </div>
       <div>
