@@ -27,25 +27,20 @@ import {
 } from "../reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 
-function loadPostsApi(data) {
-  return axios.post("/api/post", data);
+function addPostApi(data) {
+  return axios.post("/post", { content: data });
 }
 
 function* addPost(action) {
   try {
-    // const result = yield call(addPostApi, action.data);
-    const id = shortid.generate();
-    yield delay(1000);
+    const result = yield call(addPostApi, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        id,
-        content: action.data,
-      },
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: id,
+      data: result.data.id,
     });
   } catch (err) {
     yield put({
@@ -55,13 +50,13 @@ function* addPost(action) {
   }
 }
 
-function addPostApi(data) {
+function loadPostsApi(data) {
   return axios.post("/api/post", data);
 }
 
 function* loadPosts(action) {
   try {
-    // const result = yield call(addPostApi, action.data);
+    // const result = yield call(loadPostsApi, action.data);
     const id = shortid.generate();
     yield delay(1000);
     yield put({
@@ -77,16 +72,15 @@ function* loadPosts(action) {
 }
 
 function addCommentApi(data) {
-  return axios.post("/api/comment", data);
+  return axios.post(`post/${data.postId}/comment`, data);
 }
 
 function* addComment(action) {
   try {
-    // const result = yield call(addPostApi, action.data);
-    yield delay(1000);
+    const result = yield call(addCommentApi, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({

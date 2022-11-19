@@ -115,26 +115,6 @@ export const addComment = (data) => ({
   data,
 });
 
-const dummyPost = (data) => ({
-  id: data.id,
-  content: data.content,
-  User: {
-    id: 1,
-    nickname: "제로초",
-  },
-  images: [],
-  Comment: [],
-});
-
-const dummyComment = (data) => ({
-  id: shortid.generate(),
-  content: data,
-  User: {
-    id: 1,
-    nickname: "제로초",
-  },
-});
-
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
@@ -163,7 +143,7 @@ const reducer = (state = initialState, action) => {
         draft.addPostLoading = false;
         draft.addPostDone = false;
         draft.addPostError = null;
-        draft.mainPosts.unshift(dummyPost(action.data));
+        draft.mainPosts.unshift(action.data);
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
@@ -189,8 +169,8 @@ const reducer = (state = initialState, action) => {
         draft.addCommentError = null;
         break;
       case ADD_COMMENT_SUCCESS:
-        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-        post.Comment.unshift(dummyComment(action.data.content));
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Comment.unshift(action.data);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
