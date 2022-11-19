@@ -2,48 +2,7 @@ import shortid from "shortid";
 import produce from "immer";
 import faker from "faker";
 export const initialState = {
-  mainPosts: [
-    // {
-    //   id: 1,
-    //   User: {
-    //     id: 1,
-    //     nickname: "제로초",
-    //   },
-    //   content: "첫 번째 게시글 #해시태그 #익스프레스",
-    //   images: [
-    //     {
-    //       id: shortid.generate(),
-    //       src: "https://sunstat.com/wp-content/uploads/2019/01/%EC%8A%AC%EB%9D%BC%EC%9D%B4%EB%93%9C-%EB%B0%B0%EA%B2%BD%EC%9D%B4%EB%AF%B8%EC%A7%80.png",
-    //     },
-    //     {
-    //       id: shortid.generate(),
-    //       src: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
-    //     },
-    //     {
-    //       id: shortid.generate(),
-    //       src: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile6.uf.tistory.com%2Fimage%2F257E0B3655214FFD03A829",
-    //     },
-    //   ],
-    //   Comment: [
-    //     {
-    //       id: shortid.generate(),
-    //       User: {
-    //         id: shortid.generate(),
-    //         nickname: "nero",
-    //       },
-    //       content: "와우",
-    //     },
-    //     {
-    //       id: shortid.generate(),
-    //       User: {
-    //         id: shortid.generate(),
-    //         nickname: "hero",
-    //       },
-    //       content: "굿",
-    //     },
-    //   ],
-    // },
-  ],
+  mainPosts: [],
   imagePaths: [],
   hasMorePost: true,
   loadPostLoading: false,
@@ -62,32 +21,6 @@ export const initialState = {
   removeCommentDone: false,
   removeCommentError: false,
 };
-
-export const generateDummyPost = (number) =>
-  Array(number)
-    .fill()
-    .map(() => ({
-      id: shortid.generate(),
-      User: {
-        id: shortid.generate(),
-        nickname: faker.name.findName(),
-      },
-      content: faker.lorem.paragraph(),
-      images: [
-        {
-          src: faker.image.image(),
-        },
-      ],
-      Comment: [
-        {
-          User: {
-            id: shortid.generate(),
-            nickname: faker.name.findName(),
-          },
-          content: faker.lorem.sentence(),
-        },
-      ],
-    }));
 
 export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
@@ -170,23 +103,10 @@ const reducer = (state = initialState, action) => {
         break;
       case ADD_COMMENT_SUCCESS:
         const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-        post.Comment.unshift(action.data);
+        post.Comments.unshift(action.data);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
-      // const postIndex = state.mainPosts.findIndex(
-      //   (v) => v.id === action.data.postId
-      // );
-      // const post = { ...state.mainPosts[postIndex] };
-      // post.Comment = [dummyComment(action.data.content), ...post.Comment];
-      // const mainPosts = [...state.mainPosts];
-      // mainPosts[postIndex] = post;
-      // return {
-      //   ...state,
-      //   mainPosts,
-      //   addCommentLoading: false,
-      //   addCommentDone: true,
-      // };
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;

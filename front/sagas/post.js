@@ -51,17 +51,15 @@ function* addPost(action) {
 }
 
 function loadPostsApi(data) {
-  return axios.post("/api/post", data);
+  return axios.get("/posts", data);
 }
 
 function* loadPosts(action) {
   try {
-    // const result = yield call(loadPostsApi, action.data);
-    const id = shortid.generate();
-    yield delay(1000);
+    const result = yield call(loadPostsApi, action.data);
     yield put({
       type: LOAD_POSTS_SUCCESS,
-      data: generateDummyPost(10),
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -78,6 +76,7 @@ function addCommentApi(data) {
 function* addComment(action) {
   try {
     const result = yield call(addCommentApi, action.data);
+    console.log(result);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data,
