@@ -3,8 +3,45 @@ const bcrypt = require("bcrypt");
 const { User, Post } = require("../models");
 const passport = require("passport");
 const router = express.Router();
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
-router.post("/login", (req, res, next) => {
+router.get("/", async (req, res, next) => {
+  // GET /user
+  try {
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: {
+          exclude: ["password"],
+        },
+        include: [
+          {
+            model: Post,
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followings",
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followers",
+            attributes: ["id"],
+          },
+        ],
+      });
+      res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       console.error(err);
@@ -49,38 +86,10 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-router.post("/user/logout", (req, res) => {
+router.post("/logout", isLoggedIn, (req, res, next) => {
   req.logout();
   req.session.destroy();
   res.send("ok");
-});
-
-// POST/user
-router.post("/", async (req, res, next) => {
-  try {
-    // 공식문서보고 동기인지 비동기인지 확인
-    // email 중복 확인
-    const exUser = await User.findOne({
-      where: {
-        email: req.body.email,
-      },
-    });
-    if (exUser) {
-      return res.status(403).send("이미 사용중인 이메일 입니다.");
-    }
-    // password 암호화
-    const hashedPassword = await bcrypt.hash(req.body.password, 13);
-    await User.create({
-      email: req.body.email,
-      nickname: req.body.nickname,
-      password: hashedPassword,
-    });
-    res.status(201).send("ok");
-  } catch (error) {
-    console.log(error);
-    // next로 error를 보내면 error를 한번에 처리, express가 알아서 error를 알려줌
-    next(error); // status 500 Server Error
-  }
 });
 
 module.exports = router;

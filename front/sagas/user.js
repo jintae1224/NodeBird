@@ -53,7 +53,7 @@ function logOutApi() {
 
 function* logOut() {
   try {
-    const result = yield call(logOutApi);
+    yield call(logOutApi);
     yield put({
       type: LOG_OUT_SUCCESS,
     });
