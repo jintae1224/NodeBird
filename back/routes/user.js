@@ -5,6 +5,7 @@ const passport = require("passport");
 const router = express.Router();
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
+// 내 로그인 정보 매번 불러오기----------
 router.get("/", async (req, res, next) => {
   // GET /user
   try {
@@ -40,6 +41,7 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+//---------------------------------------------------------
 
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
