@@ -25,6 +25,7 @@ import {
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
+  REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
   UNLIKE_POST_FAILURE,
@@ -138,17 +139,15 @@ function* addComment(action) {
 }
 
 function removePostApi(data) {
-  return axios.post("/api/comment", data);
+  return axios.delete(`post/${data}`);
 }
 
 function* removePost(action) {
   try {
-    // const result = yield call(addPostApi, action.data);
-    const id = shortid.generate();
-    yield delay(1000);
+    const result = yield call(removePostApi, action.data);
     yield put({
       type: REMOVE_POST_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
     yield put({
       type: REMOVE_POST_OF_ME,
@@ -156,7 +155,7 @@ function* removePost(action) {
     });
   } catch (err) {
     yield put({
-      type: ADD_COMMENT_FAILURE,
+      type: REMOVE_POST_FAILURE,
       error: err.response.data,
     });
   }

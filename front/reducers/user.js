@@ -73,15 +73,6 @@ export const logOutRequestAction = () => {
   };
 };
 
-const dummyUser = (data) => ({
-  ...data,
-  nickname: "제로초",
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [{ nickname: "aaa" }, { nickname: "bbb" }, { nickname: "ccc" }],
-  Follwers: [{ nickname: "aaa" }, { nickname: "bbb" }],
-});
-
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
@@ -176,6 +167,7 @@ const reducer = (state = initialState, action) => {
         draft.changeNicknameError = null;
         break;
       case CHANGE_NICKNAME_SUCCESS:
+        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
         break;
