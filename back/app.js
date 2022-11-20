@@ -10,6 +10,7 @@ const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
+const path = require("path");
 
 dotenv.config();
 
@@ -44,6 +45,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// backend에서 upload 폴더를 제공할수 있게 함
+// "/" = "http://localhost:3065"
+app.use("/", express.static(path.join(__dirname, "upload"))); // 폴더 구조를 하나로 합쳐줌(운영체제 구조때문)
 app.get("/", (req, res) => {
   res.send("hello express");
 });
