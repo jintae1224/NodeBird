@@ -80,7 +80,7 @@ function* unlikePost(action) {
 }
 
 function addPostApi(data) {
-  return axios.post("/post", { content: data });
+  return axios.post("/post", data);
 }
 
 function* addPost(action) {
