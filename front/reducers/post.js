@@ -147,9 +147,10 @@ const reducer = (state = initialState, action) => {
         break;
       case ADD_POST_SUCCESS:
         draft.addPostLoading = false;
-        draft.addPostDone = false;
+        draft.addPostDone = true;
         draft.addPostError = null;
         draft.mainPosts.unshift(action.data);
+        draft.imagePaths = [];
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;

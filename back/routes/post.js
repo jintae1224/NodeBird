@@ -13,12 +13,41 @@ try {
   fs.mkdirSync("upload"); // 엾으면 upload 폴더 생성
 }
 
-router.post("/", isLoggedIn, async (req, res) => {
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "upload");
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname); // 확장자 추출
+      const basename = path.basename(file.originalname, ext); // 이름만 추출
+      done(null, basename + new Date().getTime() + ext); // 이름 겹침 방지
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 파일 크기 : 20MB
+});
+
+router.post("/", isLoggedIn, upload.none(), async (req, res) => {
   try {
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (req.body.image) {
+      // 이미지를 여러 개 올리면 image: [1.png, 2.png] 배열로
+      if (Array.isArray(req.body.image)) {
+        // db에는 파일 주소만 가지고 감
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        await post.addImages(images);
+      }
+      // 이미지를 하나만 올리면 image : 1.png
+      else {
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
+    }
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
@@ -81,19 +110,6 @@ router.post("/:postId/comment", isLoggedIn, async (req, res) => {
   }
 });
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, "upload");
-    },
-    filename(req, file, done) {
-      const ext = path.extname(file.originalname); // 확장자 추출
-      const basename = path.basename(file.originalname, ext); // 이름만 추출
-      done(null, basename + new Date().getTime() + ext); // 이름 겹침 방지
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 }, // 파일 크기 : 20MB
-});
 router.post(
   "/images",
   isLoggedIn,
