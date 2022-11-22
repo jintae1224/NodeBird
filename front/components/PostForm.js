@@ -32,7 +32,7 @@ const PostForm = () => {
       type: ADD_POST_REQUEST,
       data: formData,
     });
-  }, [text]);
+  }, [text, imagePaths]);
 
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();

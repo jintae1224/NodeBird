@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { Post, Comment, User, Image } = require("../models");
+const { Post, Comment, User, Image, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -29,10 +29,18 @@ const upload = multer({
 
 router.post("/", isLoggedIn, upload.none(), async (req, res) => {
   try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (hashtags) {
+      const result = hashtags.map((tag) =>
+        Hashtag.findOrCreate({ name: tag.slice(1).toLowerCase() })
+      );
+      // map돌리는 이유 : result = [[#1, true], [#2, false]]
+      await post.addHashtags(result.map((v) => v[0]));
+    }
     if (req.body.image) {
       // 이미지를 여러 개 올리면 image: [1.png, 2.png] 배열로
       if (Array.isArray(req.body.image)) {
