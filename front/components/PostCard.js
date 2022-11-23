@@ -30,22 +30,37 @@ const PostCard = ({ post }) => {
     setCommentFormOpened((prev) => !prev);
   }, []);
   const onLike = useCallback(() => {
-    dispatch({
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
+    return dispatch({
       type: LIKE_POST_REQUEST,
       data: post.id,
     });
   }, []);
   const onUnlike = useCallback(() => {
-    dispatch({
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
+    return dispatch({
       type: UNLIKE_POST_REQUEST,
       data: post.id,
     });
   }, []);
   const onRemovePost = useCallback(() => {
-    dispatch({
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
+    return dispatch({
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
+  }, []);
+
+  const onRetweet = useCallback(() => {
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
   }, []);
 
   return (
@@ -53,7 +68,7 @@ const PostCard = ({ post }) => {
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <RetweetOutlined key="retweet" />,
+          <RetweetOutlined key="retweet" onClick={onRetweet} />,
           liked ? (
             <HeartTwoTone
               twoToneColor="#dd61dd"
