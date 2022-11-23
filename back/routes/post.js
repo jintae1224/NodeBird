@@ -35,10 +35,13 @@ router.post("/", isLoggedIn, upload.none(), async (req, res) => {
       UserId: req.user.id,
     });
     if (hashtags) {
-      const result = hashtags.map((tag) =>
-        Hashtag.findOrCreate({ name: tag.slice(1).toLowerCase() })
-      );
-      // map돌리는 이유 : result = [[#1, true], [#2, false]]
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({
+            where: { name: tag.slice(1).toLowerCase() },
+          })
+        )
+      ); // [[노드, true], [리액트, true]]
       await post.addHashtags(result.map((v) => v[0]));
     }
     if (req.body.image) {
