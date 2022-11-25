@@ -105,13 +105,13 @@ function* addPost(action) {
   }
 }
 
-function loadPostsApi(data) {
-  return axios.get("/posts", data);
+function loadPostsApi(lastId) {
+  return axios.get(`/posts?lastId=${lastId || 0}`);
 }
 
 function* loadPosts(action) {
   try {
-    const result = yield call(loadPostsApi, action.data);
+    const result = yield call(loadPostsApi, action.lastId);
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data,
