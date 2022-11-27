@@ -51,11 +51,13 @@ const Home = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req, res }) => {
-      console.log(req);
-      const cookie = req ? req.headers.cookie : "";
-      axios.defaults.headers.Cookie = cookie;
+      console.log("**********************");
+      console.log(axios.headers);
+      const cookie = req ? req.cookies : "";
+      axios.defaults.headers.Cookies = "";
       if (req && cookie) {
-        axios.defaults.headers.Cookie = cookie;
+        console.log("eeeeeeeee동작함");
+        axios.defaults.headers.Cookies = cookie;
       }
       store.dispatch({
         type: LOAD_MY_INFO_REQUEST,
@@ -63,6 +65,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       store.dispatch({
         type: LOAD_POSTS_REQUEST,
       });
+      console.log("-----");
+      console.log(axios.defaults.headers.Cookie);
       // REQUEST가 saga에서 SUCCESS 될 때 까지 기다려준다
       store.dispatch(END);
       await store.sagaTask.toPromise();

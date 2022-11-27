@@ -7,7 +7,8 @@ const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 // 내 로그인 정보 매번 불러오기----------
 router.get("/", async (req, res, next) => {
-  console.log(req.headers);
+  console.log("----------");
+  console.log(req.user);
   // GET /user
   try {
     if (req.user) {
