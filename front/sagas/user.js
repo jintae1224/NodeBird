@@ -62,8 +62,8 @@ function* changeNickname(action) {
   }
 }
 
-function loadMyInfoAPI() {
-  return axios.get("/user");
+function loadMyInfoAPI(data) {
+  return axios.get(`/user/${data}`);
 }
 
 function* loadMyInfo(action) {
@@ -164,7 +164,6 @@ function signUpAPI(data) {
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
-    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
     });

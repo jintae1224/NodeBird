@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { END } from "redux-saga";
@@ -19,11 +20,6 @@ const Home = () => {
 
   useEffect(() => {
     function onScroll() {
-      console.log(
-        window.scrollY,
-        document.documentElement.clientHeight,
-        document.documentElement.scrollHeight
-      );
       if (
         window.scrollY + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300
@@ -53,17 +49,24 @@ const Home = () => {
 
 // 화면을 그리기전에 이부분을 먼저 실행함
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    store.dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
-    store.dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
-    // REQUEST가 saga에서 SUCCESS 될 때 까지 기다려준다
-    store.dispatch(END);
-    await store.sagaTask.toPromise();
-  }
+  (store) =>
+    async ({ req, res }) => {
+      console.log(req);
+      const cookie = req ? req.headers.cookie : "";
+      axios.defaults.headers.Cookie = cookie;
+      if (req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
+      store.dispatch({
+        type: LOAD_MY_INFO_REQUEST,
+      });
+      store.dispatch({
+        type: LOAD_POSTS_REQUEST,
+      });
+      // REQUEST가 saga에서 SUCCESS 될 때 까지 기다려준다
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
 );
 
 export default Home;

@@ -131,7 +131,6 @@ function addCommentApi(data) {
 function* addComment(action) {
   try {
     const result = yield call(addCommentApi, action.data);
-    console.log(result);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data,
@@ -245,6 +244,6 @@ export default function* postSaga() {
     fork(watchAddCommentPost),
     fork(watchRemovePost),
     fork(watchUploadImages),
-    fork(watchRetweet)
+    fork(watchRetweet),
   ]);
 }
