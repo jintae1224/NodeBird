@@ -1,44 +1,36 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { END } from "redux-saga";
 import AppLayout from "../components/AppLayout";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
+import wrapper from "../store/configureStore";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePost, loadPostLoading, retweetError } = useSelector(
+  const { mainPosts, hasMorePost, loadPostLoading } = useSelector(
     (state) => state.post
   );
 
-  useEffect(() => {
-    dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
-    dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
-  }, []);
-
-  useEffect(()=>{
-    if(retweetError){
-      alert(retweetError)
-    }
-  },[retweetError])
+  useEffect(() => {}, []);
 
   useEffect(() => {
     function onScroll() {
+      console.log(
+        window.scrollY,
+        document.documentElement.clientHeight,
+        document.documentElement.scrollHeight
+      );
       if (
         window.scrollY + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300
       ) {
         if (hasMorePost && !loadPostLoading) {
-          const lastId = mainPosts[mainPosts.length - 1]?.id
           dispatch({
             type: LOAD_POSTS_REQUEST,
-            lastId,
           });
         }
       }
@@ -47,7 +39,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [hasMorePost, loadPostLoading, mainPosts]);
+  }, [hasMorePost, loadPostLoading]);
 
   return (
     <AppLayout>
@@ -58,5 +50,20 @@ const Home = () => {
     </AppLayout>
   );
 };
+
+// 화면을 그리기전에 이부분을 먼저 실행함
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async () => {
+    store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
+    store.dispatch({
+      type: LOAD_POSTS_REQUEST,
+    });
+    // REQUEST가 saga에서 SUCCESS 될 때 까지 기다려준다
+    store.dispatch(END);
+    await store.sagaTask.toPromise();
+  }
+);
 
 export default Home;
